@@ -3,10 +3,12 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 
 int main (int argc, char *argv[])
 {
   pid_t pid;
+  int status;
 
   if (-1 == write(1, "Hello World!\n", strlen("Hello World!\n")))
   {
@@ -18,11 +20,14 @@ int main (int argc, char *argv[])
 
   if (pid == 0)
   {
-    printf("This is the child, pid %d\n", getpid());
+    printf("This is the child, pid %d.\n", getpid());
+    exit(0);
   }
   else
   {
-    printf("This is the parent, pid %d\n", getpid());
+    printf("This is the parent, pid %d.\n", getpid());
+    wait(&status);
+    printf("This is the parent, pid %d, signing off.\n", getpid());
   }
 
   return 0;
